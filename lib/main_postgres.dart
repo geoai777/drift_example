@@ -24,7 +24,12 @@ class DriftPostgresExample extends StatelessWidget {
         database: pgDatabase,
         username: pgUser,
         password: pgPassword
-      )
+      ),
+      settings: const ConnectionSettings(
+        /// If you expect to talk to a Postgres database over a public connection,
+        /// please use SslMode.verifyFull instead.
+        sslMode: SslMode.disable,
+      ),
     )
   );
 
@@ -81,11 +86,14 @@ class DriftPostgresExample extends StatelessWidget {
                     ),
                     body: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Column(
+                      child: SingleChildScrollView (
+                        child:
+                      Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
 
                           /// here output is printed
                           children: printMe),
+                      )
                     ));
               });
         });
