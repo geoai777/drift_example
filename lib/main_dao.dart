@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 
@@ -12,8 +14,7 @@ Future<void> main() async {
 }
 
 class DriftExample extends StatelessWidget {
-  final DatabaseCore databaseCore = DatabaseCore();
-  final BooksDao _db = DatabaseCore.booksDao;
+  final BooksDao _db = BooksDao(DatabaseCore());
 
   DriftExample({super.key});
 
@@ -24,7 +25,7 @@ class DriftExample extends StatelessWidget {
     return FutureBuilder<List<Widget>>(
 
       /// under [future] we pass function that will return data
-        future: databaseInteractionExample(databaseCore),
+        future: databaseInteractionExample(_db),
 
         /// [builder] handles state changes
         builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
@@ -97,12 +98,12 @@ class DriftExample extends StatelessWidget {
 /// Function that illustrates database interactions
 /// requires database instance as argument
 Future<List<Text>> databaseInteractionExample(
-    DatabaseCore databaseCore) async {
+    BooksDao booksDao) async {
 
   /// List of Text widgets to return for display
   List<Text> output = <Text>[];
 
-  const Book book = Book(id: 0, name: 'Drift in databases');
+  final Book book = Book(id: 0, name: 'Drift in databases');
   const List<String> bookNames = [
     'Drift in action',
     'Flutter database absctractions with Drift',
@@ -118,19 +119,19 @@ Future<List<Text>> databaseInteractionExample(
   output.add(const Text('-[ Initial database contents: ]--'));
   output.add(
       Text(
-          (await databaseCore.getAll())
+          (await booksDao.getAll())
               .toString()
       )
   );
   output.add(const Text('-[ removing ]--'));
-  await databaseCore.remove(book);
+  await booksDao.remove(book);
   output.add(const Text('-[ Adding ]--'));
   output.add(Text(book.toString()));
-  await databaseCore.insert(name: bookName);
+  await booksDao.insert(name: bookName);
   output.add(const Text('-[ New database contents ]--'));
   output.add(
       Text(
-          (await databaseCore.getAll())
+          (await booksDao.getAll())
               .toString()
       )
   );

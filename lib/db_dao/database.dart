@@ -8,7 +8,7 @@ part 'database.g.dart';
 
 @DriftDatabase(
   tables: [Books, Categories],
-  daos: [booksDao]
+  daos: [BooksDao]
 )
 class DatabaseCore extends _$DatabaseCore {
   DatabaseCore(): super(impl.connect());
