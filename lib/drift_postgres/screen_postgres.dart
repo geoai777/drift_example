@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'db/database.dart';
-import 'db/db_config.dart';
+/// to be used in real life
+// import 'db/db_config.dart';
 
 /// /!\ WARNING! This will NOT work on Web component
 
