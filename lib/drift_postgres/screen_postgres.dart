@@ -1,47 +1,59 @@
 import 'dart:math';
 
-import 'package:drift_postgres/drift_postgres.dart';
-import 'package:postgres/postgres.dart';
+/// this will be required if used without [provider]
+// import 'package:drift_postgres/drift_postgres.dart';
+// import 'package:postgres/postgres.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import '/db_postgres/database.dart';
-import '/db_postgres/db_config.dart';
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  /// Run flutter application
-  runApp(DriftPostgresExample());
-}
+import 'db/database.dart';
+import 'db/db_config.dart';
 
 /// /!\ WARNING! This will NOT work on Web component
 
-class DriftPostgresExample extends StatelessWidget {
-  final DatabaseCore databaseCore = DatabaseCore(
-    PgDatabase(
-      endpoint: Endpoint(
-        host: pgHost,
-        database: pgDatabase,
-        username: pgUser,
-        password: pgPassword
-      ),
-      settings: const ConnectionSettings(
-        /// If you expect to talk to a Postgres database over a public connection,
-        /// please use SslMode.verifyFull instead.
-        sslMode: SslMode.disable,
-      ),
-    )
-  );
+class DriftPostgresScreen extends StatefulWidget {
+  final String title;
+  final Color color;
 
-  DriftPostgresExample({super.key});
+  const DriftPostgresScreen(
+      {super.key, required this.title, required this.color});
+
+  @override
+  State<DriftPostgresScreen> createState() => _DriftPostgresScreen();
+}
+
+
+class _DriftPostgresScreen extends State<DriftPostgresScreen> {
+  /// In real life, widget [Consumer] should be removed
+  /// and databasePostgres replaced with _db from below
+  // final DatabasePostgres _db = DatabasePostgres(
+  //   PgDatabase(
+  //     endpoint: Endpoint(
+  //       host: pgHost,
+  //       database: pgDatabase,
+  //       username: pgUser,
+  //       password: pgPassword
+  //     ),
+  //     settings: const ConnectionSettings(
+  //       /// If you expect to talk to a Postgres database over a public connection,
+  //       /// please use SslMode.verifyFull instead.
+  //       sslMode: SslMode.disable,
+  //     ),
+  //   )
+  // );
+
 
   @override
   Widget build(BuildContext context) {
+
+    return Consumer<DatabasePostgres>(
+      builder: (context, databasePostgres, child) {
+
     /// Use [FutureBuilder] class to run async functions inside sync widget
     return FutureBuilder<List<Widget>>(
 
         /// under [future] we pass function that will return data
-        future: databaseInteractionExample(databaseCore),
+        future: databaseInteractionExample(databasePostgres),
 
         /// [builder] handles state changes
         builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
@@ -70,39 +82,32 @@ class DriftPostgresExample extends StatelessWidget {
           }
 
           /// Simple theming stuff
-          return MaterialApp(
-              title: 'Drift example',
-              theme: ThemeData(
-                  useMaterial3: true,
-                  textTheme: const TextTheme(
-                      bodyMedium:
-                          TextStyle(fontSize: 24.0, fontFamily: 'RobotoMono')),
-                  colorScheme: ColorScheme.fromSeed(
-                      seedColor: Colors.green, brightness: Brightness.dark)),
-              builder: (_, __) {
-                return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Drift example'),
-                    ),
-                    body: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SingleChildScrollView (
-                        child:
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+          return Scaffold(
+              appBar: AppBar(
+                title: Text(widget.title),
+                backgroundColor: widget.color,
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SingleChildScrollView (
+                  child:
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
-                          /// here output is printed
-                          children: printMe),
-                      )
-                    ));
-              });
+                    /// here output is printed
+                    children: printMe),
+                )
+              ));
         });
+      }
+    );
+
   }
 }
 
 /// Function that illustrates database interactions
 /// requires database instance as argument
-Future<List<Text>> databaseInteractionExample(DatabaseCore databaseCore) async {
+Future<List<Text>> databaseInteractionExample(DatabasePostgres databaseCore) async {
   /// List of Text widgets to return for display
   List<Text> output = <Text>[];
 

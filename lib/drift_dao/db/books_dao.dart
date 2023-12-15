@@ -2,9 +2,9 @@ part of 'database.dart';
 
 
 @DriftAccessor(tables: [Books, Categories])
-class BooksDao extends DatabaseAccessor<DatabaseCore> with _$BooksDaoMixin {
+class BooksDao extends DatabaseAccessor<DatabaseCoreDao> with _$BooksDaoMixin {
 
-  BooksDao(DatabaseCore databaseCore) : super(databaseCore);
+  BooksDao(DatabaseCoreDao DatabaseCoreDao) : super(DatabaseCoreDao);
 
   Future<List<Book>> getAll() => (select(books)
     ..orderBy([(item) => OrderingTerm(expression: item.name)]))

@@ -8,8 +8,8 @@ part 'database.g.dart';
 @DriftDatabase(
     tables: [Books, Categories]
 )
-class DatabaseCore extends _$DatabaseCore {
-  DatabaseCore(super.e);
+class DatabasePostgres extends _$DatabaseCore {
+  DatabasePostgres(super.e);
 
   @override
   int get schemaVersion => 2023121201;

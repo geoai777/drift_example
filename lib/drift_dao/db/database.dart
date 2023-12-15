@@ -10,8 +10,8 @@ part 'database.g.dart';
   tables: [Books, Categories],
   daos: [BooksDao]
 )
-class DatabaseCore extends _$DatabaseCore {
-  DatabaseCore(): super(impl.connect());
+class DatabaseCoreDao extends _$DatabaseCoreDao {
+  DatabaseCoreDao(): super(impl.connect());
 
   @override
   int get schemaVersion => 1;

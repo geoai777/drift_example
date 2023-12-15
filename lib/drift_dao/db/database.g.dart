@@ -445,11 +445,11 @@ class BooksCompanion extends UpdateCompanion<Book> {
   }
 }
 
-abstract class _$DatabaseCore extends GeneratedDatabase {
-  _$DatabaseCore(QueryExecutor e) : super(e);
+abstract class _$DatabaseCoreDao extends GeneratedDatabase {
+  _$DatabaseCoreDao(QueryExecutor e) : super(e);
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $BooksTable books = $BooksTable(this);
-  late final BooksDao booksDao = BooksDao(this as DatabaseCore);
+  late final BooksDao booksDao = BooksDao(this as DatabaseCoreDao);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -457,7 +457,7 @@ abstract class _$DatabaseCore extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [categories, books];
 }
 
-mixin _$BooksDaoMixin on DatabaseAccessor<DatabaseCore> {
+mixin _$BooksDaoMixin on DatabaseAccessor<DatabaseCoreDao> {
   $CategoriesTable get categories => attachedDatabase.categories;
   $BooksTable get books => attachedDatabase.books;
 }
